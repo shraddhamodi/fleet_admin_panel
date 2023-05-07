@@ -11,9 +11,22 @@ dependencies:
   flutter:
     sdk: flutter
 
+  get: ^4.6.5
   ready: ^1.7.7
+  firebase_messaging: ^14.2.6
+  firebase_storage: ^11.0.13
   flutter_bloc: ^8.1.2
+  otp_autofill: ^2.1.0
+  sms_autofill:
+    git:
+      url: https://github.com/sohamThence/sms_autofill.git
+  cloud_firestore: ^4.4.0
+  firebase_auth: ^4.2.5
+  firebase_core: ^2.4.1
   cupertino_icons: ^1.0.2
+  path_provider: ^2.0.11
+  image_picker: ^0.8.6
+  random_string: ^2.3.1
   flutter_localization: ^0.1.10
 
 dev_dependencies:
@@ -21,6 +34,15 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  ios: true
+  android: true
+  image_path: "assets/logo/app_launcher.png"
+  adaptive_icon_background: "assets/logo/app_launcher_bg.png"
+  adaptive_icon_foreground: "assets/logo/app_launcher_fg.png"
+  remove_alpha_ios: true
 
 flutter:
 
