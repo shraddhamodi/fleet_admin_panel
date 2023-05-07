@@ -67,7 +67,7 @@ class DashBoardExample extends StatelessWidget {
         ),
         DashboardItem(
           builder: (Map<String, dynamic> parameters) {
-            return const UserListScreen(shimmer: true);
+            return UserListScreen(shimmer: true);
           },
           icon: const Icon(Icons.list),
           id: 'user',
