@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ready/ready.dart';
 
 import '../../widgets/fake_data.dart';
+import '../controllers/driver_controller.dart';
 
 class DriverListScreen extends StatelessWidget {
   final bool shimmer;
@@ -21,7 +21,7 @@ class DriverListScreen extends StatelessWidget {
       buildItem: (FakeItem? item, int index) {
         return _buildItem(item, index);
       },
-      controller: ReadyListCubit(const ReadyListState.initializing(args: null)),
+      controller: DriverListCubit(const ReadyListState.initializing(args: null)),
     );
   }
 
@@ -53,30 +53,5 @@ class DriverListScreen extends StatelessWidget {
         );
       },
     );
-  }
-}
-
-abstract class BaseController extends Cubit<ReadyListState<FakeItem, dynamic>>
-    implements ReadyListController<FakeItem> {
-  BaseController(ReadyListState<FakeItem, dynamic> initialState)
-      : super(initialState);
-}
-
-class ReadyListCubit extends BaseController with ReadyRemoteController {
-  ReadyListCubit(ReadyListState<FakeItem, dynamic> initialState)
-      : super(initialState);
-
-  @override
-  Future<RemoteResult<FakeItem>> loadData(int skip, int? pageSize,
-      [ICancelToken? cancelToken]) async {
-    var list = await FakeRepo.asyncList(30, 0, const Duration(seconds: 3));
-    return RemoteResult.success(list, 100);
-  }
-
-  @override
-  void onChange(Change<ReadyListState<FakeItem, dynamic>> change) {
-    // print(change.currentState);
-    // print(change.nextState);
-    super.onChange(change);
   }
 }

@@ -3,13 +3,13 @@ import 'package:fleet_admin_panel/widgets/fake_data.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ready/ready.dart';
 
-abstract class UsersController extends Cubit<ReadyListState<FakeItem, dynamic>>
+abstract class CustomerController extends Cubit<ReadyListState<FakeItem, dynamic>>
     implements ReadyListController<FakeItem> {
-  UsersController(ReadyListState<FakeItem, dynamic> initialState)
+  CustomerController(ReadyListState<FakeItem, dynamic> initialState)
       : super(initialState);
 }
 
-class ReadyListCubit extends UsersController with ReadyRemoteController {
+class ReadyListCubit extends CustomerController with ReadyRemoteController {
   ReadyListCubit(ReadyListState<FakeItem, dynamic> initialState)
       : super(initialState);
 

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:ready/ready.dart';
 
 import '../../widgets/fake_data.dart';
-import '../controllers/user_controller.dart';
+import '../controllers/customer_controller.dart';
 
-class UserListScreen extends StatelessWidget {
+class CustomerListScreen extends StatelessWidget {
   final bool shimmer;
-  const UserListScreen({
+  const CustomerListScreen({
     Key? key,
     required this.shimmer,
   }) : super(key: key);

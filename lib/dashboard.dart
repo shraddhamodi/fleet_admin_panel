@@ -1,9 +1,11 @@
+import 'package:fleet_admin_panel/stores/screens/stores_list_screens.dart';
 import 'package:fleet_admin_panel/widgets/ready_grid.dart';
-import 'package:fleet_admin_panel/widgets/ready_list.dart';
-import 'package:fleet_admin_panel/users/screens/users_list_screens.dart';
 import 'package:flutter/material.dart';
 import 'package:ready/ready.dart';
 
+import 'customers/screens/customers_list_screens.dart';
+import 'driver/screens/driver_list_screen.dart';
+import 'main_category/screens/main_category_list_screen.dart';
 import 'widgets/animated_items.dart';
 
 class DashBoardExample extends StatelessWidget {
@@ -67,7 +69,7 @@ class DashBoardExample extends StatelessWidget {
         ),
         DashboardItem(
           builder: (Map<String, dynamic> parameters) {
-            return UserListScreen(shimmer: true);
+            return const CustomerListScreen(shimmer: true);
           },
           icon: const Icon(Icons.list),
           id: 'user',
@@ -75,7 +77,7 @@ class DashBoardExample extends StatelessWidget {
         ),
         DashboardItem(
           builder: (Map<String, dynamic> parameters) {
-            return const ReadyListExample(shimmer: true);
+            return const StoreListScreen(shimmer: true);
           },
           icon: const Icon(Icons.list),
           id: 'store',
@@ -83,7 +85,7 @@ class DashBoardExample extends StatelessWidget {
         ),
         DashboardItem(
           builder: (Map<String, dynamic> parameters) {
-            return const ReadyListExample(shimmer: true);
+            return const MainCategoryListScreen(shimmer: true);
           },
           icon: const Icon(Icons.list),
           id: 'category',
@@ -99,7 +101,7 @@ class DashBoardExample extends StatelessWidget {
         ),
         DashboardItem(
           builder: (Map<String, dynamic> parameters) {
-            return const ReadyListExample(shimmer: true);
+            return const DriverListScreen(shimmer: true);
           },
           icon: const Icon(Icons.list),
           id: 'driver',
