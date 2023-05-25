@@ -67,8 +67,8 @@ class CommonAssets {
               children: <Widget>[
                 GestureDetector(
                   onTap:onTapCamera,
-                  child: Column(
-                    children: const <Widget>[
+                  child: const Column(
+                    children: <Widget>[
                       Icon(Icons.camera_alt_outlined),
                       Text("Camera"),
                     ],
@@ -76,8 +76,8 @@ class CommonAssets {
                 ),
                 GestureDetector(
                   onTap: onTapGallery,
-                  child: Column(
-                    children: const <Widget>[
+                  child: const Column(
+                    children: <Widget>[
                       Icon(Icons.photo_library_outlined),
                       Text("Gallery"),
                     ],

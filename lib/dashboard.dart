@@ -41,6 +41,7 @@ class DashBoardExample extends StatelessWidget {
           ),
         ],
       ),
+      navigator: const NavigatorOptions(),
       actions: [
         IconButton(
           onPressed: () {},
@@ -101,7 +102,7 @@ class DashBoardExample extends StatelessWidget {
         ),
         DashboardItem(
           builder: (Map<String, dynamic> parameters) {
-            return const DriverListScreen(shimmer: true);
+            return DriverListScreen();
           },
           icon: const Icon(Icons.list),
           id: 'driver',
