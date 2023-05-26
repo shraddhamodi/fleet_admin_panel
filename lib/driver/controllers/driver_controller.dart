@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fleet_admin_panel/widgets/fake_data.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ready/ready.dart';
 
@@ -15,21 +14,10 @@ class DriverListCubit extends DriverController with ReadyRemoteController {
       : super(initialState);
 
   List<FakeItem> list = [];
-  final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final phoneController = TextEditingController();
-
-  Future<RemoteResult<FakeItem>> addData() async {
-
-    final CollectionReference postsRef = FirebaseFirestore.instance.collection('drivers');
-    await postsRef.add({'name':nameController.text});
-    return RemoteResult.success(list, 100);
-  }
 
   @override
   Future<RemoteResult<FakeItem>> loadData(int skip, int? pageSize,
       [ICancelToken? cancelToken]) async {
-
     list = await asyncList(0, const Duration(seconds: 3));
 
     return RemoteResult.success(list, 100);
@@ -38,10 +26,11 @@ class DriverListCubit extends DriverController with ReadyRemoteController {
   static Future<List<FakeItem>> asyncList(
       [int skip = 0, Duration duration = const Duration(seconds: 1)]) async {
     await Future.delayed(duration);
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("drivers").get();
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection("drivers").get();
     List<FakeItem> driverList = [];
     for (int i = 0; i < querySnapshot.docs.length; i++) {
-      driverList.add(FakeItem("${i+1}", querySnapshot.docs[i]["name"], 23));
+      driverList.add(FakeItem("${i + 1}", querySnapshot.docs[i]["name"], 23));
     }
     return driverList;
   }

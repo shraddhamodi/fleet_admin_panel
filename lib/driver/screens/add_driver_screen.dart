@@ -1,13 +1,62 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fleet_admin_panel/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:ready/ready.dart';
 
-import '../controllers/driver_controller.dart';
-import 'driver_list_screen.dart';
+import '../../widgets/snackbar_message_widget.dart';
+import '../models/driver_model.dart';
 
-class AddDriverScreen extends StatelessWidget {
-  AddDriverScreen({super.key});
-  final controller =
-      DriverListCubit(const ReadyListState.initializing(args: null));
+class AddDriverScreen extends StatefulWidget {
+  const AddDriverScreen({super.key});
+
+  @override
+  State<AddDriverScreen> createState() => _AddDriverScreenState();
+}
+
+class _AddDriverScreenState extends State<AddDriverScreen> {
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
+  addDriverData(BuildContext context) async {
+    if (nameController.text.isEmpty) {
+      SnackBarMessageWidget.show("Please enter driver name");
+    } else if (passwordController.text.isEmpty) {
+      SnackBarMessageWidget.show("Please enter password");
+    } else if (phoneController.text.isEmpty) {
+      SnackBarMessageWidget.show("Please enter phone no");
+    } else if (emailController.text.isEmpty) {
+      SnackBarMessageWidget.show("Please enter email id");
+    } else {
+      try{
+        UserCredential authUser = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+            email: emailController.text, password: passwordController.text);
+        String userId = authUser.user!.uid;
+
+        final DocumentReference postsDocRef =
+        FirebaseFirestore.instance.collection('drivers').doc(userId);
+        await postsDocRef.set(DriverModel.add(
+            userId,
+            nameController.text,
+            passwordController.text,
+            emailController.text,
+            phoneController.text,
+            Timestamp.fromDate(DateTime.now()),
+            Timestamp.fromDate(DateTime.now())).toJson());
+        Navigator.of(context).pop();
+        // PageInfo.of(context).pushNewPage(
+        //     builder: (context) => DriverListScreen(),
+        //     titleSpans: [const TextSpan(text: 'sub')]);
+        SnackBarMessageWidget.show("Add Driver Successfully !");
+      }on FirebaseAuthException catch (error){
+        SnackBarMessageWidget.show(error.message.toString());
+        return error;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,52 +70,81 @@ class AddDriverScreen extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             sliver: SliverList.list(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Driver Name"),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    TextField(
-                      controller: controller.nameController,
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    const Text("Email Name"),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    TextField(
-                      controller: controller.emailController,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    const Text("Phone Number"),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    TextField(
-                      controller: controller.phoneController,
-                      keyboardType: TextInputType.phone,
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Align(
-                        alignment: Alignment.center,
-                        child: TextButton(
-                            onPressed: () {
-                              controller.addData();
-                              PageInfo.of(context).pushNewPage(
-                                  builder: (context) => DriverListScreen(),
-                                  titleSpans: [const TextSpan(text: 'sub')]);
-                            },
-                            child: const Text("Submit")))
-                  ],
+                Form(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      const Text("Driver Name"),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      TextField(
+                        controller: nameController,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Text("Email Id"),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      TextField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Text("Password"),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      TextField(
+                        controller: passwordController,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Text("Phone Number"),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      TextField(
+                        controller: phoneController,
+                        keyboardType: TextInputType.phone,
+                        maxLength: 10,
+                        decoration: const InputDecoration(
+                          prefixStyle: TextStyle(color: Colors.transparent),
+                          prefixIcon:Padding(
+                            padding: EdgeInsets.only(top: 12,left: 12,right: 4),
+                            child: Text("+91",style: TextStyle(fontSize: 16),),
+                          ),),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Align(
+                          alignment: Alignment.center,
+                          child: TextButton(
+                              onPressed: () {
+                                addDriverData(context);
+                              },
+                              style: ButtonStyle(
+                                animationDuration: const Duration(milliseconds: 2000),
+                                backgroundColor: MaterialStateProperty.all(Colors.lightBlue),
+                                padding: MaterialStateProperty.all(const EdgeInsets.all(12)),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                ),
+                              ),
+                              child: const Text("Submit",style: TextStyle(color: AppColors.white),)))
+                    ],
+                  ),
                 )
               ],
             ),
