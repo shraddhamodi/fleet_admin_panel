@@ -1,3 +1,4 @@
+import 'package:fleet_admin_panel/banner/screens/banner_list_screen.dart';
 import 'package:fleet_admin_panel/stores/screens/stores_list_screens.dart';
 import 'package:fleet_admin_panel/widgets/ready_grid.dart';
 import 'package:flutter/material.dart';
@@ -107,6 +108,14 @@ class DashBoardExample extends StatelessWidget {
           icon: const Icon(Icons.list),
           id: 'driver',
           label: 'Drivers',
+        ),
+        DashboardItem(
+          builder: (Map<String, dynamic> parameters) {
+            return const BannerListScreen(shimmer: true,);
+          },
+          icon: const Icon(Icons.list),
+          id: 'banner',
+          label: 'Banners',
         ),
       ],
     );

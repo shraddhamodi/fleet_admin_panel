@@ -1,20 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fleet_admin_panel/widgets/fake_data.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ready/ready.dart';
 
-abstract class MainCategoryController extends Cubit<ReadyListState<FakeItem, dynamic>>
-    implements ReadyListController<FakeItem> {
-  MainCategoryController(ReadyListState<FakeItem, dynamic> initialState)
+import '../models/main_category_model.dart';
+
+abstract class MainCategoryController extends Cubit<ReadyListState<MainCategoryModel, dynamic>>
+    implements ReadyListController<MainCategoryModel> {
+  MainCategoryController(ReadyListState<MainCategoryModel, dynamic> initialState)
       : super(initialState);
 }
 
 class MainCategoryCubit extends MainCategoryController with ReadyRemoteController {
-  MainCategoryCubit(ReadyListState<FakeItem, dynamic> initialState)
+  MainCategoryCubit(ReadyListState<MainCategoryModel, dynamic> initialState)
       : super(initialState);
 
   @override
-  Future<RemoteResult<FakeItem>> loadData(int skip, int? pageSize,
+  Future<RemoteResult<MainCategoryModel>> loadData(int skip, int? pageSize,
       [ICancelToken? cancelToken]) async {
 
     var list = await asyncList(0, const Duration(seconds: 3));
@@ -22,19 +23,19 @@ class MainCategoryCubit extends MainCategoryController with ReadyRemoteControlle
     return RemoteResult.success(list, 100);
   }
 
-  static Future<List<FakeItem>> asyncList(
+  static Future<List<MainCategoryModel>> asyncList(
       [int skip = 0, Duration duration = const Duration(seconds: 1)]) async {
     await Future.delayed(duration);
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("category").get();
-    List<FakeItem> categoryList = [];
+    List<MainCategoryModel> categoryList = [];
     for (int i = 0; i < querySnapshot.docs.length; i++) {
-      categoryList.add(FakeItem("${i+1}", querySnapshot.docs[i]["name"], 23));
+      categoryList.add(MainCategoryModel.fromSnapshot(querySnapshot.docs[i]));
     }
     return categoryList;
   }
 
   @override
-  void onChange(Change<ReadyListState<FakeItem, dynamic>> change) {
+  void onChange(Change<ReadyListState<MainCategoryModel, dynamic>> change) {
     super.onChange(change);
   }
 }

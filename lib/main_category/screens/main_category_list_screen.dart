@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ready/ready.dart';
-
-import '../../widgets/fake_data.dart';
+import '../../styles/colors.dart';
 import '../controllers/main_category_controller.dart';
+import '../models/main_category_model.dart';
 
 class MainCategoryListScreen extends StatelessWidget {
   final bool shimmer;
@@ -18,14 +18,14 @@ class MainCategoryListScreen extends StatelessWidget {
       pageSize: 40,
       padding: const EdgeInsets.all(20),
       allowFakeItems: shimmer,
-      buildItem: (FakeItem? item, int index) {
+      buildItem: (MainCategoryModel? item, int index) {
         return _buildItem(item, index);
       },
       controller: MainCategoryCubit(const ReadyListState.initializing(args: null)),
     );
   }
 
-  Widget _buildItem(FakeItem? item, int index) {
+  Widget _buildItem(MainCategoryModel? item, int index) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Animated.builder(
@@ -43,8 +43,15 @@ class MainCategoryListScreen extends StatelessWidget {
               child: Card(
                 child: ListTile(
                   title: Text(item?.name ?? '...'),
-                  trailing: Text('${item?.rate}'),
-                  leading: CircleAvatar(child: Text(item?.id ?? '#')),
+                  trailing: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.edit,color: AppColors.secondaryGreen,),
+                      Icon(Icons.delete,color: AppColors.lightRed,),
+                    ],
+                  ),
+                  leading: CircleAvatar(
+                      child: Image.asset("assets/common/user.png")),
                 ),
               ),
             );

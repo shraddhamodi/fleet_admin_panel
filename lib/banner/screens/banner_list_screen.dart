@@ -1,8 +1,9 @@
+import 'package:fleet_admin_panel/styles/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ready/ready.dart';
 
-import '../../widgets/fake_data.dart';
+import '../controllers/banner_controller.dart';
+import '../models/banner_model.dart';
 
 class BannerListScreen extends StatelessWidget {
   final bool shimmer;
@@ -18,14 +19,14 @@ class BannerListScreen extends StatelessWidget {
       pageSize: 40,
       padding: const EdgeInsets.all(20),
       allowFakeItems: shimmer,
-      buildItem: (FakeItem? item, int index) {
+      buildItem: (BannerModel? item, int index) {
         return _buildItem(item, index);
       },
-      controller: ReadyListCubit(const ReadyListState.initializing(args: null)),
+      controller: BannerListCubit(const ReadyListState.initializing(args: null)),
     );
   }
 
-  Widget _buildItem(FakeItem? item, int index) {
+  Widget _buildItem(BannerModel? item, int index) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Animated.builder(
@@ -42,9 +43,16 @@ class BannerListScreen extends StatelessWidget {
               enabled: item == null,
               child: Card(
                 child: ListTile(
-                  title: Text(item?.name ?? '...'),
-                  trailing: Text('${item?.rate}'),
-                  leading: CircleAvatar(child: Text(item?.id ?? '#')),
+                  title: Text(item?.bannerId ?? '...'),
+                  trailing: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.edit,color: AppColors.secondaryGreen,),
+                      Icon(Icons.delete,color: AppColors.lightRed,),
+                    ],
+                  ),
+                  leading: CircleAvatar(
+                      child: Image.asset("assets/common/user.png")),
                 ),
               ),
             );
@@ -56,27 +64,3 @@ class BannerListScreen extends StatelessWidget {
   }
 }
 
-abstract class BaseController extends Cubit<ReadyListState<FakeItem, dynamic>>
-    implements ReadyListController<FakeItem> {
-  BaseController(ReadyListState<FakeItem, dynamic> initialState)
-      : super(initialState);
-}
-
-class ReadyListCubit extends BaseController with ReadyRemoteController {
-  ReadyListCubit(ReadyListState<FakeItem, dynamic> initialState)
-      : super(initialState);
-
-  @override
-  Future<RemoteResult<FakeItem>> loadData(int skip, int? pageSize,
-      [ICancelToken? cancelToken]) async {
-    var list = await FakeRepo.asyncList(30, 0, const Duration(seconds: 3));
-    return RemoteResult.success(list, 100);
-  }
-
-  @override
-  void onChange(Change<ReadyListState<FakeItem, dynamic>> change) {
-    // print(change.currentState);
-    // print(change.nextState);
-    super.onChange(change);
-  }
-}

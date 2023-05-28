@@ -1,8 +1,9 @@
+import 'package:fleet_admin_panel/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:ready/ready.dart';
 
-import '../../widgets/fake_data.dart';
 import '../controllers/customer_controller.dart';
+import '../models/customer_model.dart';
 
 class CustomerListScreen extends StatelessWidget {
   final bool shimmer;
@@ -18,14 +19,15 @@ class CustomerListScreen extends StatelessWidget {
       pageSize: 40,
       padding: const EdgeInsets.all(20),
       allowFakeItems: shimmer,
-      buildItem: (FakeItem? item, int index) {
+      buildItem: (CustomerModel? item, int index) {
         return _buildItem(item, index);
       },
-      controller: ReadyListCubit(const ReadyListState.initializing(args: null)),
+      controller:
+          CustomerListCubit(const ReadyListState.initializing(args: null)),
     );
   }
 
-  Widget _buildItem(FakeItem? item, int index) {
+  Widget _buildItem(CustomerModel? item, int index) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Animated.builder(
@@ -43,8 +45,16 @@ class CustomerListScreen extends StatelessWidget {
               child: Card(
                 child: ListTile(
                   title: Text(item?.name ?? '...'),
-                  trailing: Text('${item?.rate}'),
-                  leading: CircleAvatar(child: Text(item?.id ?? '#')),
+                  subtitle: Text('${item?.email}'),
+                  trailing: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.edit,color: AppColors.secondaryGreen,),
+                      Icon(Icons.delete,color: AppColors.lightRed,),
+                    ],
+                  ),
+                  leading: CircleAvatar(
+                      child: Image.asset("assets/common/user.png")),
                 ),
               ),
             );
