@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DriverModel{
+  int? index;
   String? driverId;
   String? name;
   String? password;
@@ -10,14 +11,16 @@ class DriverModel{
   Timestamp? createdAt;
 
   DriverModel();
-  DriverModel.add(this.driverId,this.name,this.password,this.email,this.phone,this.createdAt,this.updateAt);
+  DriverModel.edit(this.driverId,this.name,this.password,this.email,this.phone,this.createdAt,this.updateAt);
+  DriverModel.add(this.index,this.driverId,this.name,this.password,this.email,this.phone,this.createdAt,this.updateAt);
 
-  factory DriverModel.fromSnapshot(DocumentSnapshot snapshot) {
+  factory DriverModel.fromSnapshot(int index,DocumentSnapshot snapshot) {
     final data = snapshot.data()! as Map<String, dynamic>;
-    return DriverModel.fromJson(snapshot.id,data);
+    return DriverModel.fromJson(index,data);
   }
 
-  DriverModel.fromJson(String id,Map<String, dynamic> json) {
+  DriverModel.fromJson(int id,Map<String, dynamic> json) {
+    index = id;
     driverId = json['driver_id'];
     name = json['name'];
     password = json["password"];

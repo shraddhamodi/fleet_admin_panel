@@ -10,9 +10,7 @@ class AnimatedScopeItemsExample extends StatelessWidget {
       delay: const Duration(seconds: 1),
       child: CustomScrollView(
         slivers: [
-          SliverOverlapInjector(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
-          SliverPadding(
+         SliverPadding(
             padding: const EdgeInsets.all(20),
             sliver: SliverGrid.count(
               crossAxisCount: 5,

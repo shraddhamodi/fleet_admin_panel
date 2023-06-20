@@ -1,8 +1,8 @@
 import 'package:fleet_admin_panel/driver/controllers/driver_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ready/ready.dart';
-
-import '../../widgets/fake_data.dart';
+import '../models/driver_model.dart';
 import 'add_driver_screen.dart';
 
 class DriverListScreen extends StatelessWidget {
@@ -17,23 +17,23 @@ class DriverListScreen extends StatelessWidget {
     return ResponsiveDataTable(
       controller: controller,
       dataTable: DataTableOptions(
-        buildItem: (int index, FakeItem item) {
+        buildItem: (int index, DriverModel driver) {
           return [
-            Text(item.id),
-            for (var i = 0; i < 1; i++) Text(item.name),
+            Text(driver.index.toString()),
+            for (var i = 0; i < 1; i++) Text(driver.name.toString().capitalize!),
           ];
         },
-        headers: ['#', ...List.generate(1, (index) => 'Name'), "Rate"]
+        headers: ['#', ...List.generate(1, (index) => 'Name')]
             .toDataColumns(),
       ),
       list: ListOptions(
-        title: (int index, FakeItem item) => Text(item.name),
+        title: (int index, DriverModel item) => Text(item.name.toString()),
       ),
       actions: [
           IconButton(
               onPressed: () {
 
-                PageInfo.of(context).pushNewPage(builder: (context) => AddDriverScreen(), titleSpans: [const TextSpan(text: "Add Driver")]);
+                PageInfo.of(context).pushNewPage(builder: (context) => const AddDriverScreen(driver: null,), titleSpans: [const TextSpan(text: "Add Driver")]);
                 // PageInfo.of(context).pushNewPage(
                 //     builder: (context) => DriverListScreen(),
                 //     titleSpans: [const TextSpan(text: 'sub')]);
@@ -55,17 +55,25 @@ class DriverListScreen extends StatelessWidget {
         );
       },
       rowActions: [
+        IconAction.edit(
+            color: (t){return Colors.green;},
+            action: (BuildContext context,
+            DriverListCubit controller, DriverModel driver) async {
+
+              PageInfo.of(context).pushNewPage(builder: (context) => AddDriverScreen(driver: driver,), titleSpans: [const TextSpan(text: "Edit Driver")]);
+
+            }),
         IconAction.view(
           action:
-              (BuildContext context, DriverListCubit controller, FakeItem item) {
+              (BuildContext context, DriverListCubit controller, DriverModel driver) {
             return showDialog(
               context: context,
               builder: (_) {
                 return AlertDialog(
-                  title: Text(item.id),
+                  title: Text(driver.driverId.toString()),
                   content: ListTile(
-                    title: Text(item.name),
-                    trailing: Text(item.rate.toString()),
+                    title: Text(driver.name.toString().capitalize!),
+                    trailing: Text(driver.email.toString()),
                   ),
                 );
               },
@@ -73,9 +81,10 @@ class DriverListScreen extends StatelessWidget {
           },
         ),
         IconAction.delete(action: (BuildContext context,
-            DriverListCubit controller, FakeItem item) async {
+            DriverListCubit controller, DriverModel item) async {
           await Future.delayed(const Duration(seconds: 1));
-          controller.remove(item);
+          // controller.remove(item);
+          controller.deleteDriver(item);
         }),
       ],
     );
